@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planejamento Urbano: Construindo o Futuro das Cidades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet" />
+    <!-- Chosen Palette: Warm Neutrals & Teal -->
+    <!-- Application Structure Plan: A single-page application with a top navigation bar for direct access to four thematic sections: "O que é?", "Impactos", "Cidades Inteligentes", and "Legislação". This structure replaces the rigid slide-by-slide format, empowering the user to explore topics in any order. This design is chosen for usability, as it allows users to quickly find information relevant to them without sequential constraints. Key interactions include smooth scrolling, interactive cards for detailed information, tabs to organize related legal concepts, and conceptual charts to visualize abstract ideas. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Impactos Socioeconômicos. -> Goal: Compare. -> Viz/Method: Horizontal Bar Chart (Chart.js/Canvas). -> Interaction: Tooltips on hover. -> Justification: Visually communicates the relative importance of different benefits, making the abstract text more concrete.
+        - Report Info: Cidades Inteligentes. -> Goal: Organize/Inform. -> Viz/Method: Radar Chart (Chart.js/Canvas). -> Interaction: Highlighting segments on hover. -> Justification: Effectively displays the multi-dimensional nature of the "smart city" concept.
+        - Report Info: Legislação (Estatuto & Plano Diretor). -> Goal: Organize. -> Viz/Method: Interactive Tabs (HTML/CSS/JS). -> Interaction: Clicking tabs reveals content. -> Justification: An intuitive UI pattern to present related but distinct information cleanly.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc; /* slate-50 */
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 350px;
+        max-height: 400px;
+      }
+      @media (max-width: 768px) {
+        .chart-container {
+          height: 300px;
+        }
+      }
+      .nav-link {
+        transition: color 0.3s ease;
+      }
+      .nav-link:hover {
+        color: #0d9488; /* teal-600 */
+      }
+      .tab-button.active {
+        border-color: #0d9488; /* teal-600 */
+        color: #0d9488;
+        background-color: #f0fdfa; /* teal-50 */
+      }
+    </style>
+  </head>
+  <body class="text-slate-700">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+      <nav
+        class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-xl font-bold text-teal-700"
+          >Planejamento Urbano</a
+        >
+        <div class="hidden md:flex space-x-8">
+          <a href="#o-que-e" class="nav-link">O que é?</a>
+          <a href="#impactos" class="nav-link">Impactos</a>
+          <a href="#smart-cities" class="nav-link">Cidades Inteligentes</a>
+          <a href="#legislacao" class="nav-link">Legislação</a>
+        </div>
+        <div class="md:hidden">
+          <select
+            id="mobile-nav"
+            class="bg-white border border-slate-300 rounded-md p-2">
+            <option value="#home">Menu</option>
+            <option value="#o-que-e">O que é?</option>
+            <option value="#impactos">Impactos</option>
+            <option value="#smart-cities">Cidades Inteligentes</option>
+            <option value="#legislacao">Legislação</option>
+          </select>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+      <section id="home" class="text-center mb-20 md:mb-32">
+        <h1 class="text-4xl md:text-6xl font-bold text-slate-800 mb-4">
+          Construindo o Futuro das Cidades
+        </h1>
+        <p class="max-w-3xl mx-auto text-lg text-slate-600">
+          Uma exploração interativa sobre a importância do planejamento urbano,
+          a ascensão das cidades inteligentes e o arcabouço legal que molda o
+          desenvolvimento no Brasil.
+        </p>
+      </section>
+
+      <section id="o-que-e" class="mb-20 md:mb-32 scroll-mt-20">
+        <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">
+          O que é Planejamento Urbano?
+        </h2>
+        <p class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+          Esta seção define o conceito central de planejamento urbano. Trata-se
+          do processo técnico e político que organiza o uso do solo para
+          melhorar a qualidade de vida, buscando criar cidades mais justas,
+          funcionais e sustentáveis para todos. Explore os pilares abaixo para
+          entender como isso se materializa.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+            <div class="text-4xl mb-4 text-teal-600">🏠</div>
+            <h3 class="font-bold text-xl mb-2">Uso do Solo</h3>
+            <p>
+              Define onde podem ser construídas moradias, comércios e indústrias
+              para um crescimento ordenado.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+            <div class="text-4xl mb-4 text-teal-600">🚌</div>
+            <h3 class="font-bold text-xl mb-2">Mobilidade</h3>
+            <p>
+              Estrutura os sistemas de transporte público e viário para garantir
+              o deslocamento eficiente de pessoas.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+            <div class="text-4xl mb-4 text-teal-600">🌳</div>
+            <h3 class="font-bold text-xl mb-2">Espaços Públicos</h3>
+            <p>
+              Planeja a localização de parques, praças, escolas e hospitais para
+              o bem-estar da comunidade.
+            </p>
+          </div>
+          <div
+            class="bg-white p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+            <div class="text-4xl mb-4 text-teal-600">💧</div>
+            <h3 class="font-bold text-xl mb-2">Meio Ambiente</h3>
+            <p>
+              Garante o saneamento básico e a preservação ambiental para uma
+              cidade saudável e sustentável.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="impactos" class="mb-20 md:mb-32 scroll-mt-20">
+        <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">
+          Impactos Socioeconômicos
+        </h2>
+        <p class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+          Um bom planejamento urbano gera profundos impactos positivos, tanto na
+          esfera social quanto na econômica. Nesta seção, visualizamos a
+          importância relativa desses benefícios através de um gráfico
+          interativo, demonstrando como as ações de planejamento se traduzem em
+          ganhos tangíveis para a cidade e seus habitantes.
+        </p>
+        <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+          <div class="chart-container">
+            <canvas id="impactosChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section id="smart-cities" class="mb-20 md:mb-32 scroll-mt-20">
+        <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">
+          Cidades Inteligentes (Smart Cities)
+        </h2>
+        <p class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+          As Cidades Inteligentes representam a vanguarda do planejamento
+          urbano, integrando tecnologia para otimizar a gestão de recursos. O
+          gráfico abaixo ilustra os pilares fundamentais de uma Smart City.
+          Interaja com ele para ver como diferentes áreas se conectam para criar
+          um ambiente urbano mais conectado, responsivo e sustentável.
+        </p>
+        <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+          <div class="chart-container">
+            <canvas id="smartCityChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section id="legislacao" class="scroll-mt-20">
+        <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">
+          Legislação Brasileira
+        </h2>
+        <p class="text-center max-w-3xl mx-auto mb-12 text-slate-600">
+          O planejamento no Brasil é orientado por um sólido arcabouço legal.
+          Esta seção detalha os dois principais instrumentos: o Estatuto da
+          Cidade, que define as regras gerais, e o Plano Diretor, a sua
+          aplicação prática no município. Use as abas abaixo para navegar entre
+          esses dois conceitos e entender seu papel na gestão democrática das
+          cidades.
+        </p>
+        <div class="w-full max-w-4xl mx-auto">
+          <div class="mb-6 flex border-b border-slate-200">
+            <button
+              data-tab="estatuto"
+              class="tab-button flex-1 py-3 px-4 text-lg font-medium border-b-2 border-transparent text-slate-500 hover:text-teal-600 active">
+              Estatuto da Cidade
+            </button>
+            <button
+              data-tab="plano"
+              class="tab-button flex-1 py-3 px-4 text-lg font-medium border-b-2 border-transparent text-slate-500 hover:text-teal-600">
+              Plano Diretor
+            </button>
+          </div>
+
+          <div id="estatuto" class="tab-content">
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+              <h3 class="text-2xl font-bold mb-4 text-teal-700">
+                Estatuto da Cidade (Lei nº 10.257/2001)
+              </h3>
+              <p class="mb-6">
+                Esta lei federal estabelece as diretrizes gerais da política
+                urbana no país, baseada em dois princípios fundamentais que
+                visam o desenvolvimento justo e democrático das cidades.
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                  class="bg-teal-50 p-6 rounded-lg border-l-4 border-teal-500">
+                  <h4 class="font-bold text-lg mb-2">
+                    Função Social da Propriedade
+                  </h4>
+                  <p>
+                    A propriedade deve servir ao bem da coletividade. Imóveis
+                    vazios ou subutilizados em áreas com infraestrutura podem
+                    ser penalizados para incentivar sua ocupação e uso
+                    produtivo.
+                  </p>
+                </div>
+                <div
+                  class="bg-teal-50 p-6 rounded-lg border-l-4 border-teal-500">
+                  <h4 class="font-bold text-lg mb-2">
+                    Gestão Democrática da Cidade
+                  </h4>
+                  <p>
+                    As decisões sobre o futuro da cidade devem contar com a
+                    participação da população através de audiências públicas,
+                    conselhos municipais e outros canais de diálogo.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="plano" class="tab-content hidden">
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+              <h3 class="text-2xl font-bold mb-4 text-teal-700">
+                Plano Diretor
+              </h3>
+              <p class="mb-6">
+                É a principal ferramenta para aplicar os princípios do Estatuto
+                da Cidade na prática. Trata-se de uma lei municipal, obrigatória
+                para cidades com mais de 20 mil habitantes, que funciona como um
+                "manual" para o crescimento da cidade.
+              </p>
+              <ul class="list-disc list-inside space-y-3">
+                <li>
+                  <span class="font-bold">Zoneamento:</span> Divide a cidade em
+                  zonas (residenciais, comerciais, etc.) e define o que pode ser
+                  construído em cada uma.
+                </li>
+                <li>
+                  <span class="font-bold">Regras de Construção:</span>
+                  Estabelece limites de altura, tamanho de lotes e outros
+                  parâmetros edilícios.
+                </li>
+                <li>
+                  <span class="font-bold">Diretrizes para o Futuro:</span>
+                  Aponta áreas prioritárias para investimentos em habitação,
+                  transporte e saneamento.
+                </li>
+                <li>
+                  <span class="font-bold">Revisão Periódica:</span> Deve ser
+                  revisado a cada 10 anos com ampla participação popular para se
+                  manter atualizado.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-20 md:mt-32">
+      <div class="container mx-auto px-6 py-8 text-center">
+        <p>
+          Entender e participar das decisões sobre nossa cidade é um direito e
+          um dever de todo cidadão.
+        </p>
+        <p class="text-sm text-slate-400 mt-2">
+          Aplicação interativa criada para fins educacionais.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile navigation
+        const mobileNav = document.getElementById("mobile-nav");
+        mobileNav.addEventListener("change", (e) => {
+          if (e.target.value) {
+            window.location.href = e.target.value;
+          }
+        });
+
+        // Tabs for Legislação section
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            const targetTab = button.getAttribute("data-tab");
+
+            tabContents.forEach((content) => {
+              if (content.id === targetTab) {
+                content.classList.remove("hidden");
+              } else {
+                content.classList.add("hidden");
+              }
+            });
+          });
+        });
+
+        // Chart.js - Impactos Socioeconômicos
+        const ctxImpactos = document.getElementById("impactosChart");
+        if (ctxImpactos) {
+          new Chart(ctxImpactos, {
+            type: "bar",
+            data: {
+              labels: [
+                "Redução da Desigualdade",
+                "Qualidade de Vida",
+                "Atração de Investimentos",
+                "Eficiência e Otimização",
+                "Saúde e Segurança",
+              ],
+              datasets: [
+                {
+                  label: "Impacto Positivo",
+                  data: [90, 85, 80, 75, 70],
+                  backgroundColor: [
+                    "rgba(13, 148, 136, 0.7)", // teal-600
+                    "rgba(15, 118, 110, 0.7)", // teal-700
+                    "rgba(17, 94, 89, 0.7)", // teal-800
+                    "rgba(19, 78, 74, 0.7)", // teal-900
+                    "rgba(6, 78, 79, 0.7)", // teal-950
+                  ],
+                  borderColor: [
+                    "rgb(13, 148, 136)",
+                    "rgb(15, 118, 110)",
+                    "rgb(17, 94, 89)",
+                    "rgb(19, 78, 74)",
+                    "rgb(6, 78, 79)",
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              indexAxis: "y",
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                title: {
+                  display: true,
+                  text: "Principais Benefícios do Planejamento Urbano",
+                  font: { size: 16 },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.dataset.label || "";
+                      if (label) {
+                        label += ": ";
+                      }
+                      if (context.parsed.x !== null) {
+                        label +=
+                          context.parsed.x + "% de importância conceitual";
+                      }
+                      return label;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return value + "%";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Chart.js - Smart City
+        const ctxSmartCity = document.getElementById("smartCityChart");
+        if (ctxSmartCity) {
+          new Chart(ctxSmartCity, {
+            type: "radar",
+            data: {
+              labels: [
+                "Mobilidade",
+                "Sustentabilidade",
+                "Governança",
+                "Qualidade de Vida",
+                "Economia",
+                "Segurança",
+              ],
+              datasets: [
+                {
+                  label: "Foco da Cidade Inteligente",
+                  data: [85, 90, 75, 80, 70, 88],
+                  fill: true,
+                  backgroundColor: "rgba(13, 148, 136, 0.2)",
+                  borderColor: "rgb(13, 148, 136)",
+                  pointBackgroundColor: "rgb(13, 148, 136)",
+                  pointBorderColor: "#fff",
+                  pointHoverBackgroundColor: "#fff",
+                  pointHoverBorderColor: "rgb(13, 148, 136)",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Pilares de uma Cidade Inteligente",
+                  font: { size: 16 },
+                },
+              },
+              scales: {
+                r: {
+                  angleLines: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                  },
+                  suggestedMin: 0,
+                  suggestedMax: 100,
+                  pointLabels: {
+                    font: {
+                      size: 12,
+                    },
+                  },
+                  ticks: {
+                    backdropColor: "transparent",
+                  },
+                },
+              },
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
